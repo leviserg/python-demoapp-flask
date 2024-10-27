@@ -1,8 +1,7 @@
-FROM python:3.9-slim-buster
+FROM python:3.9.20-slim
 
 LABEL Name="Python Flask Demo App" Version=1.4.2
-LABEL org.opencontainers.image.source = "https://github.com/benc-uk/python-demoapp"
-
+LABEL org.opencontainers.image.source="https://gitlab.com/personal6855043/python-demoapp-flask"
 ARG srcDir=src
 WORKDIR /app
 COPY $srcDir/requirements.txt .
