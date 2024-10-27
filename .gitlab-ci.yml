@@ -1,7 +1,27 @@
+variables:
+    IMAGE_NAME: leviserg/python-demoapp-flask
+    IMAGE_TAG: python-app-1.0
+
+stages:
+    - test
+    - build
+
 run_tests:
+    stage: test
     image: python:3.9.20-slim
     before_script:
         - apt-get update && apt-get install make
+    script: make venv && make test
+
+build_image:
+    stage: build
+    image: docker:20.10.16
+    services:
+        - docker:20.10.16-dind # dind means DockerInDocker
+    variables:
+        DOCKER_TLS_CERTDIR: "/certs"
+    before_script:
+        - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
     script:
-        - make venv
-        - make test
+        - docker build -t $IMAGE_NAME:$IMAGE_TAG .
+        - docker push $IMAGE_NAME:$IMAGE_TAG
