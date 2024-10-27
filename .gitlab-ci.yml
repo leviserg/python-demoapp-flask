@@ -1,10 +1,12 @@
 variables:
     IMAGE_NAME: leviserg/python-demoapp-flask
     IMAGE_TAG: python-app-1.0
+    SERVER_IP: 161.35.223.117
 
 stages:
     - test
     - build
+    - deploy
 
 run_tests:
     stage: test
@@ -25,3 +27,13 @@ build_image:
     script:
         - docker build --progress=plain -t $IMAGE_NAME:$IMAGE_TAG .  --no-cache
         - docker push $IMAGE_NAME:$IMAGE_TAG
+
+deploy:
+  stage: deploy
+  before_script:
+    - chmod 400 $SSH_KEY
+  script:
+    - ssh -o StrictHostKeyChecking=no -i $SSH_KEY root@$SERVER_IP "
+        docker login -u $REGISTRY_USER -p $REGISTRY_PASS &&
+        docker ps -aq | xargs docker stop | xargs docker rm &&
+        docker run -d -p 5000:5000 $IMAGE_NAME:$IMAGE_TAG"
