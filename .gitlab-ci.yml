@@ -3,4 +3,5 @@ run_tests:
     before_script:
         - apt-get update && apt-get install make
     script:
+        - make venv
         - make test
