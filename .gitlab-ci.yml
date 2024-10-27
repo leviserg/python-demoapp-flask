@@ -1,7 +1,7 @@
 variables:
     IMAGE_NAME: leviserg/python-demoapp-flask
     IMAGE_TAG: python-app-1.0
-    SERVER_IP: 161.35.223.117
+    SERVER_IP: 91.199.45.247
 
 stages:
     - test
