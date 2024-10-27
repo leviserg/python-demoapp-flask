@@ -32,6 +32,7 @@ deploy:
   stage: deploy
   before_script:
     - chmod 400 $SSH_KEY
+    - apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
   script:
     - ssh -o StrictHostKeyChecking=no -i $SSH_KEY root@$SERVER_IP "
         docker login -u $REGISTRY_USER -p $REGISTRY_PASS &&
