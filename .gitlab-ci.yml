@@ -23,5 +23,5 @@ build_image:
     before_script:
         - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
     script:
-        - docker build -t $IMAGE_NAME:$IMAGE_TAG .
+        - docker build --progress=plain -t $IMAGE_NAME:$IMAGE_TAG .  --no-cache
         - docker push $IMAGE_NAME:$IMAGE_TAG
