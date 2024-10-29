@@ -1,4 +1,5 @@
 variables:
+    APP_NAME: python-demoapp-flask
     IMAGE_NAME: leviserg/python-demoapp-flask
     IMAGE_TAG: python-app-1.0
     SERVER_IP: 91.199.45.247
@@ -34,6 +35,8 @@ deploy:
     - chmod 400 $SSH_KEY
   script:
     - ssh -o StrictHostKeyChecking=no -i $SSH_KEY root@$SERVER_IP "
-         docker login -u $REGISTRY_USER -p $REGISTRY_PASS &&
-         docker ps -q --filter "name=$IMAGE_NAME" | grep -q . && docker stop $IMAGE_NAME && docker rm -fv $IMAGE_NAME &&
-         docker run $IMAGE_NAME -d -p 5000:5000 $IMAGE_NAME:$IMAGE_TAG"
+        docker login -u $REGISTRY_USER -p $REGISTRY_PASS &&
+        docker ps -q --filter 'name=$APP_NAME' | grep -q . && docker stop $APP_NAME && docker rm -fv $APP_NAME &&
+        docker rmi $IMAGE_NAME:$IMAGE_TAG &&
+        docker pull $IMAGE_NAME:$IMAGE_TAG &&
+        docker run --name $APP_NAME -d -p 5000:5000 $IMAGE_NAME:$IMAGE_TAG"
